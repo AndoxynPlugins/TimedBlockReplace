@@ -1,18 +1,10 @@
-# A list of blocks to replace. Make sure you make an entry in to-blocks and block-times if you make an entry here.
-# Blocks in 'to-blocks' and 'block-times' will be ignored if they are not in this list.
+# It is NOT recommended that you edit this file directly.
+#
+# It is much simpler and easier to use the in-game command '/tbr'
+# --------
 from-blocks:
 - 1
-- 2
-# A mapping from each from-block to each to-block.
-# for example to replace the block '1' with the block '5',
-# and the block '10' with '20', you would use:
-#
-# to-blocks:
-#   1: 5
-#   10: 20
 to-blocks:
   1: 2
-  2: 1
-# The amount of time before a from-block turns into a to-block after it is placed
 block-times:
   1: 10

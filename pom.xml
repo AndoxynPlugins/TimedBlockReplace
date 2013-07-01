@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>net.daboross.bukkitdev.timedblockchange</groupId>
-    <artifactId>TimedBlockChange</artifactId>
+    <groupId>net.daboross.bukkitdev.timedblockreplace</groupId>
+    <artifactId>TimedBlockReplace</artifactId>
     <packaging>jar</packaging>
     <version>1.0</version>
-    <name>TimedBlockChange</name>
+    <name>TimedBlockReplace</name>
     <repositories>
         <repository>
             <id>bukkit-repo</id>
@@ -12,7 +12,7 @@
         </repository>
     </repositories>
     <build>
-        <finalName>TimerBlockChange</finalName>
+        <finalName>TimedBlockReplace</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

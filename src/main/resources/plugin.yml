@@ -1,5 +1,20 @@
-name: TimedBlockChange
-main: net.daboross.bukkitdev.timedblockchange.TimedBlockChange
+name: TimedBlockReplace
+main: net.daboross.bukkitdev.timedblockchange.TimedBlockReplace
 version: 1.0
 author: Dabo Ross
-description: TimedBlockChange changes blocks after a certain amount of times has passed since they are placed
+description: |
+  TimedBlockReplace allows you to replace blocks after they are placed.
+  For instance you can replace cobble with stone 5 minutes after it is placed.
+commands:
+  tbr:
+    description: This is the base command for TimedBlockReplace
+    usage: |
+      To add a new block that should change:
+      /<command> add [from-block] [to-block] [time-till-change]
+      To remove a block that should change:
+      /<command> remove [from-block]
+      To list all blocks that are currently going to change when placed:
+      /<command> list
+      For command help / to view this:
+      /<command> help
+    aliases: [timedblockchange]

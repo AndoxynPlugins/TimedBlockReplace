@@ -3,7 +3,7 @@
  * Website: www.daboross.net
  * Email: daboross@daboross.net
  */
-package net.daboross.bukkitdev.timedblockchange;
+package net.daboross.bukkitdev.timedblockreplace;
 
 import org.bukkit.block.Block;
 
@@ -25,7 +25,7 @@ public class BlockReplaceTask implements Runnable {
 
     @Override
     public void run() {
-        BlockPlaceListener.currentlyHeldBlocks.remove(blockToReplace.getLocation());
+        BlockPlaceListener.locationsCurrentlyWaiting.remove(blockToReplace.getLocation());
         if (blockToReplace.getTypeId() == fromBlockID) {
             blockToReplace.setTypeId(toBlockID);
         }

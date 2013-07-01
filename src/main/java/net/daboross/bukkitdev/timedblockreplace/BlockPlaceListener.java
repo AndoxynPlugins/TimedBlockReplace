@@ -3,7 +3,7 @@
  * Website: www.daboross.net
  * Email: daboross@daboross.net
  */
-package net.daboross.bukkitdev.timedblockchange;
+package net.daboross.bukkitdev.timedblockreplace;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,11 +22,11 @@ import org.bukkit.event.block.BlockPlaceEvent;
  */
 public class BlockPlaceListener implements Listener {
 
-    private final TimedBlockChange tbc;
+    private final TimedBlockReplace tbc;
     private final Set<Integer> blocksToReplace = new HashSet<Integer>();
-    static final Set<Location> currentlyHeldBlocks = new HashSet<Location>();
+    static final Set<Location> locationsCurrentlyWaiting = new HashSet<Location>();
 
-    public BlockPlaceListener(TimedBlockChange tbc) {
+    public BlockPlaceListener(TimedBlockReplace tbc) {
         this.tbc = tbc;
         blocksToReplace.addAll(tbc.getConfig().getIntegerList("from-blocks"));
     }
@@ -36,7 +36,7 @@ public class BlockPlaceListener implements Listener {
         if (bpe.isCancelled()) {
             return;
         }
-        if (blocksToReplace.contains(bpe.getBlockPlaced().getTypeId()) && !currentlyHeldBlocks.contains(bpe.getBlockPlaced().getLocation())) {
+        if (blocksToReplace.contains(bpe.getBlockPlaced().getTypeId()) && !locationsCurrentlyWaiting.contains(bpe.getBlockPlaced().getLocation())) {
             Block b = bpe.getBlockPlaced();
             runTask(b, tbc.getConfig().getInt("to-blocks." + b.getTypeId(), -1), tbc.getConfig().getInt("block-times." + b.getTypeId(), -1));
         }
@@ -48,7 +48,7 @@ public class BlockPlaceListener implements Listener {
         } else if (timeTillChange == -1) {
             tbc.getLogger().log(Level.WARNING, "The block {0} is in from-blocks, but not block-times!", b.getTypeId());
         }
-        currentlyHeldBlocks.add(b.getLocation());
+        locationsCurrentlyWaiting.add(b.getLocation());
         BlockReplaceTask task = new BlockReplaceTask(b, toBlock);
         Bukkit.getScheduler().runTaskLater(tbc, task, timeTillChange * 20L);
     }
