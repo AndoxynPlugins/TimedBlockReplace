@@ -70,7 +70,7 @@ public class AddCommandHandler implements SubCommandHandler {
             sender.sendMessage(subCommand.getHelpMessage(baseCommandLabel, subCommandLabel));
             return;
         }
-        sender.sendMessage(ColorList.DATA + fromBlockID + ColorList.REG + " will now be changed to " + ColorList.DATA + toBlockID + timeTillReplace + ColorList.REG + " seconds after it is placed!");
+        sender.sendMessage(ColorList.DATA + fromBlockID + ColorList.REG + " will now be changed to " + ColorList.DATA + toBlockID + " " + timeTillReplace + ColorList.REG + " seconds after it is placed!");
         sender.sendMessage(ColorList.REG + "To remove this record, use " + ColorList.CMD + "/" + baseCommandLabel + ColorList.SUBCMD + " remove " + ColorList.ARGS + fromBlockID);
         sender.sendMessage(ColorList.DATA + fromBlockID + ColorList.REG + "'s name is: " + Material.getMaterial(fromBlockID));
         sender.sendMessage(ColorList.DATA + toBlockID + ColorList.REG + "'s name is: " + Material.getMaterial(toBlockID));

@@ -20,11 +20,13 @@ public class TimedBlockReplace extends JavaPlugin {
     public static final String CONFIG_FROMBLOCK_LIST = "from-blocks";
     public static final String CONFIG_TO_BLOCK_PREFIX = "to-blocks.";
     public static final String CONFIG_TIMES_PREFIX = "block-times.";
+    private BlockPlaceListener bpl;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
-        Bukkit.getPluginManager().registerEvents(new BlockPlaceListener(this), this);
+        bpl = new BlockPlaceListener(this);
+        Bukkit.getPluginManager().registerEvents(bpl, this);
         PluginCommand tbr = getCommand("tbr");
         if (tbr != null) {
             new ConfigChangeCommandHandler(this).registerCommand(tbr);
@@ -33,25 +35,34 @@ public class TimedBlockReplace extends JavaPlugin {
         }
     }
 
+    @Override
+    public void onDisable() {
+        saveConfig();
+    }
+
     public void addConfigBlock(int fromBlockID, int toBlockID, int timeTillReplace) {
         FileConfiguration config = getConfig();
+        List<Integer> list = config.getIntegerList(CONFIG_FROMBLOCK_LIST);
         config.set(CONFIG_TO_BLOCK_PREFIX + fromBlockID, toBlockID);
         config.set(CONFIG_TIMES_PREFIX + fromBlockID, timeTillReplace);
-        List<Integer> list = config.getIntegerList(CONFIG_FROMBLOCK_LIST);
         if (!list.contains(fromBlockID)) {
             list.add(fromBlockID);
             config.set(CONFIG_FROMBLOCK_LIST, list);
+            saveConfig();
+            bpl.reloadConfig();
         }
     }
 
     public boolean removeConfigBlock(int fromBlockID) {
         FileConfiguration config = getConfig();
+        List<Integer> list = config.getIntegerList(CONFIG_FROMBLOCK_LIST);
         config.set(CONFIG_TO_BLOCK_PREFIX + fromBlockID, null);
         config.set(CONFIG_TIMES_PREFIX + fromBlockID, null);
-        List<Integer> list = config.getIntegerList(CONFIG_FROMBLOCK_LIST);
         if (list.contains(fromBlockID)) {
             list.remove(fromBlockID);
             config.set(CONFIG_FROMBLOCK_LIST, list);
+            saveConfig();
+            bpl.reloadConfig();
             return true;
         }
         return false;

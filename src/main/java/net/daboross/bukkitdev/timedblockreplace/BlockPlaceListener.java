@@ -31,6 +31,11 @@ public class BlockPlaceListener implements Listener {
         blocksToReplace.addAll(tbc.getConfig().getIntegerList(TimedBlockReplace.CONFIG_FROMBLOCK_LIST));
     }
 
+    public void reloadConfig() {
+        blocksToReplace.clear();
+        blocksToReplace.addAll(tbc.getConfig().getIntegerList(TimedBlockReplace.CONFIG_FROMBLOCK_LIST));
+    }
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent bpe) {
         if (bpe.isCancelled()) {
@@ -43,13 +48,14 @@ public class BlockPlaceListener implements Listener {
     }
 
     private void runTask(Block b, int toBlock, int timeTillChange) {
-        if (toBlock == -1) {
+        if (toBlock < 0) {
             tbc.getLogger().log(Level.WARNING, "The block {0} is in from-blocks, but not to-blocks!", b.getTypeId());
-        } else if (timeTillChange == -1) {
+        } else if (timeTillChange < 0) {
             tbc.getLogger().log(Level.WARNING, "The block {0} is in from-blocks, but not block-times!", b.getTypeId());
+        } else {
+            locationsCurrentlyWaiting.add(b.getLocation());
+            BlockReplaceTask task = new BlockReplaceTask(b, toBlock);
+            Bukkit.getScheduler().runTaskLater(tbc, task, timeTillChange * 20L);
         }
-        locationsCurrentlyWaiting.add(b.getLocation());
-        BlockReplaceTask task = new BlockReplaceTask(b, toBlock);
-        Bukkit.getScheduler().runTaskLater(tbc, task, timeTillChange * 20L);
     }
 }
