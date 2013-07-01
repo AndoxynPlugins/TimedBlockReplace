@@ -59,7 +59,7 @@ public class TimedBlockReplace extends JavaPlugin {
         config.set(CONFIG_TO_BLOCK_PREFIX + fromBlockID, null);
         config.set(CONFIG_TIMES_PREFIX + fromBlockID, null);
         if (list.contains(fromBlockID)) {
-            list.remove(fromBlockID);
+            list.remove((Integer) fromBlockID);
             config.set(CONFIG_FROMBLOCK_LIST, list);
             saveConfig();
             bpl.reloadConfig();
