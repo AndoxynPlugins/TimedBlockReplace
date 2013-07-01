@@ -1,0 +1,5 @@
+name: TimedBlockChange
+main: net.daboross.bukkitdev.timedblockchange.TimedBlockChange
+version: 1.0
+author: Dabo Ross
+description: TimedBlockChange changes blocks after a certain amount of times has passed since they are placed
