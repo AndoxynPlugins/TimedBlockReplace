@@ -28,7 +28,7 @@ public class BlockPlaceListener implements Listener {
 
     public BlockPlaceListener(TimedBlockReplace tbc) {
         this.tbc = tbc;
-        blocksToReplace.addAll(tbc.getConfig().getIntegerList("from-blocks"));
+        blocksToReplace.addAll(tbc.getConfig().getIntegerList(TimedBlockReplace.CONFIG_FROMBLOCK_LIST));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -38,7 +38,7 @@ public class BlockPlaceListener implements Listener {
         }
         if (blocksToReplace.contains(bpe.getBlockPlaced().getTypeId()) && !locationsCurrentlyWaiting.contains(bpe.getBlockPlaced().getLocation())) {
             Block b = bpe.getBlockPlaced();
-            runTask(b, tbc.getConfig().getInt("to-blocks." + b.getTypeId(), -1), tbc.getConfig().getInt("block-times." + b.getTypeId(), -1));
+            runTask(b, tbc.getConfig().getInt(TimedBlockReplace.CONFIG_TO_BLOCK_PREFIX + b.getTypeId(), -1), tbc.getConfig().getInt(TimedBlockReplace.CONFIG_TIMES_PREFIX + b.getTypeId(), -1));
         }
     }
 

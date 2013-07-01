@@ -74,6 +74,7 @@ public class AddCommandHandler implements SubCommandHandler {
         sender.sendMessage(ColorList.REG + "To remove this record, use " + ColorList.CMD + "/" + baseCommandLabel + ColorList.SUBCMD + " remove " + ColorList.ARGS + fromBlockID);
         sender.sendMessage(ColorList.DATA + fromBlockID + ColorList.REG + "'s name is: " + Material.getMaterial(fromBlockID));
         sender.sendMessage(ColorList.DATA + toBlockID + ColorList.REG + "'s name is: " + Material.getMaterial(toBlockID));
-        tbr.getLogger().log(Level.INFO, "Adding Record: from-block={0} to-block={1} timeTillReplace={2}", new Object[]{fromBlockID, toBlockID, timeTillReplace});
+        tbr.getLogger().log(Level.INFO, "Adding Record: fromBlockID={0} toBlockID={1} timeTillReplace={2}", new Object[]{fromBlockID, toBlockID, timeTillReplace});
+        tbr.addConfigBlock(fromBlockID, toBlockID, timeTillReplace);
     }
 }
