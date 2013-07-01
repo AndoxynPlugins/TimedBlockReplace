@@ -6,6 +6,7 @@
 package net.daboross.bukkitdev.timedblockreplace.subcommandhandlers;
 
 import net.daboross.bukkitdev.timedblockreplace.TimedBlockReplace;
+import net.daboross.bukkitdev.timedblockreplace.commandexecutorbase.ColorList;
 import net.daboross.bukkitdev.timedblockreplace.commandexecutorbase.SubCommand;
 import net.daboross.bukkitdev.timedblockreplace.commandexecutorbase.SubCommandHandler;
 import org.bukkit.command.Command;
@@ -25,5 +26,50 @@ public class AddCommandHandler implements SubCommandHandler {
 
     @Override
     public void runCommand(CommandSender sender, Command baseCommand, String baseCommandLabel, SubCommand subCommand, String subCommandLabel, String[] subCommandArgs) {
+        if (subCommandArgs.length < 3) {
+            sender.sendMessage(ColorList.ERR + "Please sepcify a FromBlock, ToBlock and TimeTillReplace!");
+            sender.sendMessage(subCommand.getHelpMessage(baseCommandLabel, subCommandLabel));
+            return;
+        }
+        int fromBlockID, toBlockID, timeTillReplace;
+        try {
+            fromBlockID = Integer.parseInt(subCommandArgs[0]);
+        } catch (NumberFormatException nfe) {
+            sender.sendMessage(ColorList.ERR_ARGS + subCommandArgs[0] + ColorList.ERR + " is not an integer! Please use the block ID, not the block name!");
+            sender.sendMessage(subCommand.getHelpMessage(baseCommandLabel, subCommandLabel));
+            return;
+        }
+        if (fromBlockID <= 0) {
+            sender.sendMessage(ColorList.ERR_ARGS + fromBlockID + ColorList.ERR + " is not a non-0 positive integer! Please use the block ID, not the block name!");
+            sender.sendMessage(subCommand.getHelpMessage(baseCommandLabel, subCommandLabel));
+            return;
+        }
+        try {
+            toBlockID = Integer.parseInt(subCommandArgs[1]);
+        } catch (NumberFormatException nfe) {
+            sender.sendMessage(ColorList.ERR_ARGS + subCommandArgs[1] + ColorList.ERR + " is not an integer! Please use the block ID, not the block name!");
+            sender.sendMessage(subCommand.getHelpMessage(baseCommandLabel, subCommandLabel));
+            return;
+        }
+        if (toBlockID <= 0) {
+            sender.sendMessage(ColorList.ERR_ARGS + toBlockID + ColorList.ERR + " is not a non-0 positive integer! Please use the block ID, not the block name!");
+            sender.sendMessage(subCommand.getHelpMessage(baseCommandLabel, subCommandLabel));
+            return;
+        }
+        try {
+            timeTillReplace = Integer.parseInt(subCommandArgs[2]);
+        } catch (NumberFormatException nfe) {
+            sender.sendMessage(ColorList.ERR_ARGS + subCommandArgs[2] + ColorList.ERR + " is not an integer! Please use an integer in seconds for the TimeTillReplace!");
+            sender.sendMessage(subCommand.getHelpMessage(baseCommandLabel, subCommandLabel));
+            return;
+        }
+        if (timeTillReplace <= 0) {
+            sender.sendMessage(ColorList.ERR_ARGS + timeTillReplace + ColorList.ERR + " is not a non-0 positive integer! I am sorry but I can't modify the past.");
+            sender.sendMessage(subCommand.getHelpMessage(baseCommandLabel, subCommandLabel));
+            return;
+        }
+        sender.sendMessage(ColorList.REG + "Added Record: from:" + ColorList.DATA + fromBlockID + ColorList.REG + " to:" + ColorList.DATA + toBlockID + ColorList.REG + " after " + ColorList.DATA + timeTillReplace + ColorList.REG + " seconds!");
+        sender.sendMessage(ColorList.REG + "To remove this record, use " + ColorList.CMD + "/" + baseCommandLabel + ColorList.SUBCMD + " remove " + ColorList.ARGS + fromBlockID);
+        System.out.println("Adding Record: from:" + fromBlockID + " to:" + toBlockID + " timeTillReplace:" + timeTillReplace);
     }
 }
