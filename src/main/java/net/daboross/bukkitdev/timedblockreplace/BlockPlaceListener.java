@@ -5,7 +5,9 @@
  */
 package net.daboross.bukkitdev.timedblockreplace;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
@@ -15,6 +17,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.scheduler.BukkitTask;
 
 /**
  *
@@ -24,7 +27,7 @@ public class BlockPlaceListener implements Listener {
 
     private final TimedBlockReplace tbc;
     private final Set<Integer> blocksToReplace = new HashSet<Integer>();
-    static final Set<Location> locationsCurrentlyWaiting = new HashSet<Location>();
+    static final Map<Location, BlockReplaceTask> locationsCurrentlyWaiting = new HashMap<Location, BlockReplaceTask>();
 
     public BlockPlaceListener(TimedBlockReplace tbc) {
         this.tbc = tbc;
@@ -36,13 +39,14 @@ public class BlockPlaceListener implements Listener {
         blocksToReplace.addAll(tbc.getConfig().getIntegerList(TimedBlockReplace.CONFIG_FROMBLOCK_LIST));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockPlace(BlockPlaceEvent bpe) {
-        if (bpe.isCancelled()) {
-            return;
-        }
-        if (blocksToReplace.contains(bpe.getBlockPlaced().getTypeId()) && !locationsCurrentlyWaiting.contains(bpe.getBlockPlaced().getLocation())) {
+        if ((!bpe.isCancelled()) && blocksToReplace.contains(bpe.getBlockPlaced().getTypeId())) {
             Block b = bpe.getBlockPlaced();
+            BlockReplaceTask brt = locationsCurrentlyWaiting.get(b.getLocation());
+            if (brt != null) {
+                brt.cancel();
+            }
             runTask(b, tbc.getConfig().getInt(TimedBlockReplace.CONFIG_TO_BLOCK_PREFIX + b.getTypeId(), -1), tbc.getConfig().getInt(TimedBlockReplace.CONFIG_TIMES_PREFIX + b.getTypeId(), -1));
         }
     }
@@ -53,9 +57,10 @@ public class BlockPlaceListener implements Listener {
         } else if (timeTillChange < 0) {
             tbc.getLogger().log(Level.WARNING, "The block {0} is in from-blocks, but not block-times!", b.getTypeId());
         } else {
-            locationsCurrentlyWaiting.add(b.getLocation());
             BlockReplaceTask task = new BlockReplaceTask(b, toBlock);
-            Bukkit.getScheduler().runTaskLater(tbc, task, timeTillChange * 20L);
+            locationsCurrentlyWaiting.put(b.getLocation(), task);
+            BukkitTask bt = Bukkit.getScheduler().runTaskLater(tbc, task, timeTillChange * 20L);
+            task.setTask(bt);
         }
     }
 }

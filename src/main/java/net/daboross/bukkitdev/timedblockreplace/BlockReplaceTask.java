@@ -6,6 +6,7 @@
 package net.daboross.bukkitdev.timedblockreplace;
 
 import org.bukkit.block.Block;
+import org.bukkit.scheduler.BukkitTask;
 
 /**
  *
@@ -13,9 +14,11 @@ import org.bukkit.block.Block;
  */
 public class BlockReplaceTask implements Runnable {
 
-    private final Block blockToReplace;
-    private final int toBlockID;
-    private final int fromBlockID;
+    final Block blockToReplace;
+    final int toBlockID;
+    final int fromBlockID;
+    private BukkitTask task;
+    private boolean canceled = false;
 
     public BlockReplaceTask(Block blockToReplace, int toBlock) {
         this.blockToReplace = blockToReplace;
@@ -25,9 +28,23 @@ public class BlockReplaceTask implements Runnable {
 
     @Override
     public void run() {
-        BlockPlaceListener.locationsCurrentlyWaiting.remove(blockToReplace.getLocation());
-        if (blockToReplace.getTypeId() == fromBlockID) {
-            blockToReplace.setTypeId(toBlockID);
+        if (!canceled) {
+            BlockPlaceListener.locationsCurrentlyWaiting.remove(blockToReplace.getLocation());
+            if (blockToReplace.getTypeId() == fromBlockID) {
+                blockToReplace.setTypeId(toBlockID);
+            }
+        }
+    }
+
+    public void setTask(BukkitTask task) {
+        this.task = task;
+    }
+
+    public void cancel() {
+        if (!canceled) {
+            BlockPlaceListener.locationsCurrentlyWaiting.remove(blockToReplace.getLocation());
+            this.task.cancel();
+            canceled = true;
         }
     }
 }
