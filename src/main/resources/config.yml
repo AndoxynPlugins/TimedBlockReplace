@@ -1,10 +1,11 @@
 # It is NOT recommended that you edit this file directly.
 #
 # It is much simpler and easier to use the in-game command '/tbr'
+#
+# Also, all changes to this file are overwritten when any of the ingame commands
+# are used, and when the server is stopped. So don't edit while server is
+# running because your changes will be undone.
 # --------
 from-blocks:
-- 1
 to-blocks:
-  1: 2
 block-times:
-  1: 10
