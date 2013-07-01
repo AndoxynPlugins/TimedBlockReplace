@@ -25,5 +25,6 @@ public class ListCommandHandler implements SubCommandHandler {
 
     @Override
     public void runCommand(CommandSender sender, Command baseCommand, String baseCommandLabel, SubCommand subCommand, String subCommandLabel, String[] subCommandArgs) {
+        sender.sendMessage("/tbr list isn't done! BLURG!");
     }
 }

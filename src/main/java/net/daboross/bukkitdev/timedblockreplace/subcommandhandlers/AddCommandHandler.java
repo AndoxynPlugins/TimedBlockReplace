@@ -5,10 +5,12 @@
  */
 package net.daboross.bukkitdev.timedblockreplace.subcommandhandlers;
 
+import java.util.logging.Level;
 import net.daboross.bukkitdev.timedblockreplace.TimedBlockReplace;
 import net.daboross.bukkitdev.timedblockreplace.commandexecutorbase.ColorList;
 import net.daboross.bukkitdev.timedblockreplace.commandexecutorbase.SubCommand;
 import net.daboross.bukkitdev.timedblockreplace.commandexecutorbase.SubCommandHandler;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -51,8 +53,8 @@ public class AddCommandHandler implements SubCommandHandler {
             sender.sendMessage(subCommand.getHelpMessage(baseCommandLabel, subCommandLabel));
             return;
         }
-        if (toBlockID <= 0) {
-            sender.sendMessage(ColorList.ERR_ARGS + toBlockID + ColorList.ERR + " is not a non-0 positive integer! Please use the block ID, not the block name!");
+        if (toBlockID < 0) {
+            sender.sendMessage(ColorList.ERR_ARGS + toBlockID + ColorList.ERR + " is not a positive integer! Block IDs are not negative!");
             sender.sendMessage(subCommand.getHelpMessage(baseCommandLabel, subCommandLabel));
             return;
         }
@@ -63,13 +65,15 @@ public class AddCommandHandler implements SubCommandHandler {
             sender.sendMessage(subCommand.getHelpMessage(baseCommandLabel, subCommandLabel));
             return;
         }
-        if (timeTillReplace <= 0) {
-            sender.sendMessage(ColorList.ERR_ARGS + timeTillReplace + ColorList.ERR + " is not a non-0 positive integer! I am sorry but I can't modify the past.");
+        if (timeTillReplace < 0) {
+            sender.sendMessage(ColorList.ERR_ARGS + timeTillReplace + ColorList.ERR + " is not a positive integer! I am sorry but I can't modify the past.");
             sender.sendMessage(subCommand.getHelpMessage(baseCommandLabel, subCommandLabel));
             return;
         }
-        sender.sendMessage(ColorList.REG + "Added Record: from:" + ColorList.DATA + fromBlockID + ColorList.REG + " to:" + ColorList.DATA + toBlockID + ColorList.REG + " after " + ColorList.DATA + timeTillReplace + ColorList.REG + " seconds!");
+        sender.sendMessage(ColorList.DATA + fromBlockID + ColorList.REG + " will now be changed to " + ColorList.DATA + toBlockID + timeTillReplace + ColorList.REG + " seconds after it is placed!");
         sender.sendMessage(ColorList.REG + "To remove this record, use " + ColorList.CMD + "/" + baseCommandLabel + ColorList.SUBCMD + " remove " + ColorList.ARGS + fromBlockID);
-        System.out.println("Adding Record: from:" + fromBlockID + " to:" + toBlockID + " timeTillReplace:" + timeTillReplace);
+        sender.sendMessage(ColorList.DATA + fromBlockID + ColorList.REG + "'s name is: " + Material.getMaterial(fromBlockID));
+        sender.sendMessage(ColorList.DATA + toBlockID + ColorList.REG + "'s name is: " + Material.getMaterial(toBlockID));
+        tbr.getLogger().log(Level.INFO, "Adding Record: from-block={0} to-block={1} timeTillReplace={2}", new Object[]{fromBlockID, toBlockID, timeTillReplace});
     }
 }

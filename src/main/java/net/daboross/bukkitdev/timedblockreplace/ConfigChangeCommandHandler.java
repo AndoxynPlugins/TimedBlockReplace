@@ -24,9 +24,9 @@ public class ConfigChangeCommandHandler {
         commandExecutorBase = new CommandExecutorBase("timedblockreplace.config");
         SubCommand addCommand = new SubCommand("add", true, "timedblockreplace.add", new String[]{"FromBlockID", "ToBlock", "TimeTillChange"},
                 "Sets the FromBlock to change to the ToBlock after TimeTillChange seconds", new AddCommandHandler(main));
-        SubCommand removeCommand = new SubCommand("add", true, "timedblockreplace.remove",
+        SubCommand removeCommand = new SubCommand("remove", true, "timedblockreplace.remove",
                 new String[]{"FromBlockID"}, "Removes a record added with `add`", new RemoveCommandHandler(main));
-        SubCommand listCommand = new SubCommand("add", true, "timedblockreplace.add",
+        SubCommand listCommand = new SubCommand("list", true, "timedblockreplace.list",
                 "Lists all currently active blocks set to change", new ListCommandHandler(main));
         commandExecutorBase.addSubCommand(addCommand);
         commandExecutorBase.addSubCommand(removeCommand);

@@ -16,14 +16,15 @@ import org.bukkit.command.CommandSender;
  * @author daboross
  */
 public class RemoveCommandHandler implements SubCommandHandler {
-
+    
     private final TimedBlockReplace tbr;
-
+    
     public RemoveCommandHandler(TimedBlockReplace tbr) {
         this.tbr = tbr;
     }
-
+    
     @Override
     public void runCommand(CommandSender sender, Command baseCommand, String baseCommandLabel, SubCommand subCommand, String subCommandLabel, String[] subCommandArgs) {
+        sender.sendMessage("/tbr remove isn't done! BLURG!");
     }
 }
