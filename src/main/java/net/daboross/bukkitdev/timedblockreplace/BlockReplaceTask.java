@@ -14,13 +14,15 @@ import org.bukkit.scheduler.BukkitTask;
  */
 public class BlockReplaceTask implements Runnable {
 
+    private final BlockPlaceListener bpl;
     final Block blockToReplace;
     final int toBlockID;
     final int fromBlockID;
     private BukkitTask task;
     private boolean canceled = false;
 
-    public BlockReplaceTask(Block blockToReplace, int toBlock) {
+    public BlockReplaceTask(BlockPlaceListener bpl, Block blockToReplace, int toBlock) {
+        this.bpl = bpl;
         this.blockToReplace = blockToReplace;
         this.toBlockID = toBlock;
         this.fromBlockID = blockToReplace.getTypeId();
@@ -32,6 +34,7 @@ public class BlockReplaceTask implements Runnable {
             BlockPlaceListener.locationsCurrentlyWaiting.remove(blockToReplace.getLocation());
             if (blockToReplace.getTypeId() == fromBlockID) {
                 blockToReplace.setTypeId(toBlockID);
+                bpl.testBlock(blockToReplace);
             }
         }
     }
