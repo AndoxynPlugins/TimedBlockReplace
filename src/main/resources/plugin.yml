@@ -1,6 +1,6 @@
-name: TimedBlockReplace
-main: net.daboross.bukkitdev.timedblockreplace.TimedBlockReplace
-version: 1.3
+name: ${project.name}
+main: net.daboross.bukkitdev.timedblockreplace.TimedBlockReplacePlugin
+version: ${project.version}
 author: Dabo Ross
 description: |
   TimedBlockReplace allows you to replace blocks after they are placed.

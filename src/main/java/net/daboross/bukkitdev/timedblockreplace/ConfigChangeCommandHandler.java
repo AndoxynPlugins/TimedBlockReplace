@@ -16,8 +16,8 @@
  */
 package net.daboross.bukkitdev.timedblockreplace;
 
-import net.daboross.bukkitdev.timedblockreplace.commandexecutorbase.CommandExecutorBase;
-import net.daboross.bukkitdev.timedblockreplace.commandexecutorbase.SubCommand;
+import net.daboross.bukkitdev.commandexecutorbase.CommandExecutorBase;
+import net.daboross.bukkitdev.commandexecutorbase.SubCommand;
 import net.daboross.bukkitdev.timedblockreplace.subcommandhandlers.AddCommandHandler;
 import net.daboross.bukkitdev.timedblockreplace.subcommandhandlers.ListCommandHandler;
 import net.daboross.bukkitdev.timedblockreplace.subcommandhandlers.RemoveCommandHandler;
@@ -31,7 +31,7 @@ public class ConfigChangeCommandHandler {
 
     private final CommandExecutorBase commandExecutorBase;
 
-    public ConfigChangeCommandHandler(TimedBlockReplace main) {
+    public ConfigChangeCommandHandler(TimedBlockReplacePlugin main) {
         commandExecutorBase = new CommandExecutorBase("timedblockreplace.config");
         SubCommand addCommand = new SubCommand("add", true, "timedblockreplace.add", new String[]{"FromBlockID", "ToBlock", "TimeTillChange"},
                 "Sets the FromBlock to change to the ToBlock after TimeTillChange seconds", new AddCommandHandler(main));

@@ -16,17 +16,20 @@
  */
 package net.daboross.bukkitdev.timedblockreplace;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcstats.MetricsLite;
 
 /**
  *
  * @author daboross
  */
-public class TimedBlockReplace extends JavaPlugin {
+public class TimedBlockReplacePlugin extends JavaPlugin {
 
     public static final String CONFIG_FROMBLOCK_LIST = "from-blocks";
     public static final String CONFIG_TO_BLOCK_PREFIX = "to-blocks.";
@@ -41,8 +44,11 @@ public class TimedBlockReplace extends JavaPlugin {
         PluginCommand tbr = getCommand("tbr");
         if (tbr != null) {
             new ConfigChangeCommandHandler(this).registerCommand(tbr);
-        } else {
-            getLogger().warning("Command not found! Is another plugin using /tbr? Command not registered! It won't work now! Already configured block-replace records will still work though! You just won't be able to configure the plugin!");
+        }
+        try {
+            new MetricsLite(this).start();
+        } catch (IOException ex) {
+            getLogger().log(Level.WARNING, "Unable to create metrics");
         }
     }
 

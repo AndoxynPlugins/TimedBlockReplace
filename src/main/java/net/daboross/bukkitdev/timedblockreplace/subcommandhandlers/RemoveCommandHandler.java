@@ -17,10 +17,10 @@
 package net.daboross.bukkitdev.timedblockreplace.subcommandhandlers;
 
 import java.util.logging.Level;
-import net.daboross.bukkitdev.timedblockreplace.TimedBlockReplace;
-import net.daboross.bukkitdev.timedblockreplace.commandexecutorbase.ColorList;
-import net.daboross.bukkitdev.timedblockreplace.commandexecutorbase.SubCommand;
-import net.daboross.bukkitdev.timedblockreplace.commandexecutorbase.SubCommandHandler;
+import net.daboross.bukkitdev.commandexecutorbase.ColorList;
+import net.daboross.bukkitdev.commandexecutorbase.SubCommand;
+import net.daboross.bukkitdev.commandexecutorbase.SubCommandHandler;
+import net.daboross.bukkitdev.timedblockreplace.TimedBlockReplacePlugin;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -31,9 +31,9 @@ import org.bukkit.command.CommandSender;
  */
 public class RemoveCommandHandler implements SubCommandHandler {
 
-    private final TimedBlockReplace tbr;
+    private final TimedBlockReplacePlugin tbr;
 
-    public RemoveCommandHandler(TimedBlockReplace tbr) {
+    public RemoveCommandHandler(TimedBlockReplacePlugin tbr) {
         this.tbr = tbr;
     }
 

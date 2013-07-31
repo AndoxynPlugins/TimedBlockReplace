@@ -36,18 +36,18 @@ import org.bukkit.scheduler.BukkitTask;
  */
 public class BlockPlaceListener implements Listener {
 
-    private final TimedBlockReplace tbc;
+    private final TimedBlockReplacePlugin tbc;
     private final Set<Integer> blocksToReplace = new HashSet<Integer>();
     static final Map<Location, BlockReplaceTask> locationsCurrentlyWaiting = new HashMap<Location, BlockReplaceTask>();
 
-    public BlockPlaceListener(TimedBlockReplace tbc) {
+    public BlockPlaceListener(TimedBlockReplacePlugin tbc) {
         this.tbc = tbc;
-        blocksToReplace.addAll(tbc.getConfig().getIntegerList(TimedBlockReplace.CONFIG_FROMBLOCK_LIST));
+        blocksToReplace.addAll(tbc.getConfig().getIntegerList(TimedBlockReplacePlugin.CONFIG_FROMBLOCK_LIST));
     }
 
     public void reloadConfig() {
         blocksToReplace.clear();
-        blocksToReplace.addAll(tbc.getConfig().getIntegerList(TimedBlockReplace.CONFIG_FROMBLOCK_LIST));
+        blocksToReplace.addAll(tbc.getConfig().getIntegerList(TimedBlockReplacePlugin.CONFIG_FROMBLOCK_LIST));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -63,7 +63,7 @@ public class BlockPlaceListener implements Listener {
             if (brt != null) {
                 brt.cancel();
             }
-            runTask(b, tbc.getConfig().getInt(TimedBlockReplace.CONFIG_TO_BLOCK_PREFIX + b.getTypeId(), -1), tbc.getConfig().getInt(TimedBlockReplace.CONFIG_TIMES_PREFIX + b.getTypeId(), -1));
+            runTask(b, tbc.getConfig().getInt(TimedBlockReplacePlugin.CONFIG_TO_BLOCK_PREFIX + b.getTypeId(), -1), tbc.getConfig().getInt(TimedBlockReplacePlugin.CONFIG_TIMES_PREFIX + b.getTypeId(), -1));
         }
     }
 
