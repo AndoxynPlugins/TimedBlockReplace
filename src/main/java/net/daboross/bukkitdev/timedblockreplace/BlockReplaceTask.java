@@ -16,6 +16,7 @@
  */
 package net.daboross.bukkitdev.timedblockreplace;
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -27,24 +28,24 @@ public class BlockReplaceTask implements Runnable {
 
     private final BlockPlaceListener bpl;
     final Block blockToReplace;
-    final int toBlockID;
-    final int fromBlockID;
+    final Material fromMaterial;
+    final Material toMaterial;
     private BukkitTask task;
     private boolean canceled = false;
 
-    public BlockReplaceTask(BlockPlaceListener bpl, Block blockToReplace, int toBlock) {
+    public BlockReplaceTask(BlockPlaceListener bpl, Block blockToReplace, Material endMaterial) {
         this.bpl = bpl;
         this.blockToReplace = blockToReplace;
-        this.toBlockID = toBlock;
-        this.fromBlockID = blockToReplace.getTypeId();
+        this.toMaterial = endMaterial;
+        this.fromMaterial = blockToReplace.getType();
     }
 
     @Override
     public void run() {
         if (!canceled) {
             BlockPlaceListener.locationsCurrentlyWaiting.remove(blockToReplace.getLocation());
-            if (blockToReplace.getTypeId() == fromBlockID) {
-                blockToReplace.setTypeId(toBlockID);
+            if (blockToReplace.getType() == fromMaterial) {
+                blockToReplace.setType(toMaterial);
                 bpl.testBlock(blockToReplace);
             }
         }

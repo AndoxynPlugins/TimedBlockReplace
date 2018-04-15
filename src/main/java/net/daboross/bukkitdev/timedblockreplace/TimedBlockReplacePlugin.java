@@ -16,16 +16,13 @@
  */
 package net.daboross.bukkitdev.timedblockreplace;
 
-import java.io.IOException;
-import java.util.List;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
- *
  * @author daboross
  */
 public class TimedBlockReplacePlugin extends JavaPlugin {
@@ -33,12 +30,18 @@ public class TimedBlockReplacePlugin extends JavaPlugin {
     public static final String CONFIG_FROMBLOCK_LIST = "from-blocks";
     public static final String CONFIG_TO_BLOCK_PREFIX = "to-blocks.";
     public static final String CONFIG_TIMES_PREFIX = "block-times.";
-    private BlockPlaceListener bpl;
+    public Configuration configuration;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
-        bpl = new BlockPlaceListener(this);
+        try {
+            configuration = new Configuration(this);
+        } catch (NotAMaterial ex) {
+            getLogger().log(Level.WARNING, "Failed to load configuration", ex);
+            throw new RuntimeException(ex);
+        }
+        BlockPlaceListener bpl = new BlockPlaceListener(this);
         Bukkit.getPluginManager().registerEvents(bpl, this);
         PluginCommand tbr = getCommand("tbr");
         if (tbr != null) {
@@ -51,31 +54,46 @@ public class TimedBlockReplacePlugin extends JavaPlugin {
         saveConfig();
     }
 
-    public void addConfigBlock(int fromBlockID, int toBlockID, int timeTillReplace) {
-        FileConfiguration config = getConfig();
-        List<Integer> list = config.getIntegerList(CONFIG_FROMBLOCK_LIST);
-        config.set(CONFIG_TO_BLOCK_PREFIX + fromBlockID, toBlockID);
-        config.set(CONFIG_TIMES_PREFIX + fromBlockID, timeTillReplace);
-        if (!list.contains(fromBlockID)) {
-            list.add(fromBlockID);
-            config.set(CONFIG_FROMBLOCK_LIST, list);
-            saveConfig();
-            bpl.reloadConfig();
+    public void addConfigBlock(Material fromBlock, Material toBlock, int timeTillReplace) {
+        configuration.addReplace(fromBlock, toBlock, timeTillReplace);
+    }
+
+    public boolean removeConfigBlock(Material fromBlock) {
+        return configuration.removeReplace(fromBlock);
+    }
+
+    public static Material parseName(String input) throws NotAMaterial {
+        try {
+            return Material.valueOf(input.toUpperCase().trim().replace(' ', '_'));
+        } catch (IllegalArgumentException ex) {
+            int num;
+            try {
+                num = Integer.parseInt(input);
+            } catch (NumberFormatException ignored) {
+                throw new NotAMaterial("Failed to parse configuration! The string \""
+                        + input + "\" is not a valid material name. To see all valid"
+                        + " material names, go to https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html.");
+            }
+            try {
+                @SuppressWarnings("deprecation")
+                Material value = Material.getMaterial(num);
+                if (value == null) {
+                    throw new NotAMaterial("Failed to parse configuration! The integer \""
+                            + num + "\" is not a valid material integer.");
+                }
+                return value;
+            } catch (NoSuchMethodError er) {
+                throw new NotAMaterial("Failed to parse configuration! The string \""
+                        + input + "\" is not a valid material name. To see all valid"
+                        + " material names, go to https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html.");
+            }
         }
     }
 
-    public boolean removeConfigBlock(int fromBlockID) {
-        FileConfiguration config = getConfig();
-        List<Integer> list = config.getIntegerList(CONFIG_FROMBLOCK_LIST);
-        config.set(CONFIG_TO_BLOCK_PREFIX + fromBlockID, null);
-        config.set(CONFIG_TIMES_PREFIX + fromBlockID, null);
-        if (list.contains(fromBlockID)) {
-            list.remove((Integer) fromBlockID);
-            config.set(CONFIG_FROMBLOCK_LIST, list);
-            saveConfig();
-            bpl.reloadConfig();
-            return true;
+    public static class NotAMaterial extends Exception {
+
+        public NotAMaterial(String msg) {
+            super(msg);
         }
-        return false;
     }
 }

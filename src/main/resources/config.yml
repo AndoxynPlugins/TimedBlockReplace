@@ -6,6 +6,6 @@
 # are used, and when the server is stopped. So don't edit while server is
 # running because your changes will be undone.
 # --------
-from-blocks: {}
+from-blocks: []
 to-blocks: {}
 block-times: {}

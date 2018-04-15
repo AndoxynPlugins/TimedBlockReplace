@@ -14,41 +14,46 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.daboross.bukkitdev.timedblockreplace.subcommandhandlers;
+package net.daboross.bukkitdev.timedblockreplace.commands;
 
-import java.util.List;
+import java.util.Collection;
 import net.daboross.bukkitdev.commandexecutorbase.ColorList;
 import net.daboross.bukkitdev.commandexecutorbase.SubCommand;
-import net.daboross.bukkitdev.commandexecutorbase.SubCommandHandler;
+import net.daboross.bukkitdev.timedblockreplace.Configuration;
 import net.daboross.bukkitdev.timedblockreplace.TimedBlockReplacePlugin;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 /**
- *
  * @author daboross
  */
-public class ListCommandHandler implements SubCommandHandler {
+public class ListCommand extends SubCommand {
 
     private final TimedBlockReplacePlugin tbr;
 
-    public ListCommandHandler(TimedBlockReplacePlugin tbr) {
+    public ListCommand(TimedBlockReplacePlugin tbr) {
+        super("list", true, "timedblockreplace.list", "Lists all currently active blocks set to change");
         this.tbr = tbr;
     }
 
     @Override
-    public void runCommand(CommandSender sender, Command baseCommand, String baseCommandLabel, SubCommand subCommand, String subCommandLabel, String[] subCommandArgs) {
-        List<Integer> enabledBlocks = tbr.getConfig().getIntegerList(TimedBlockReplacePlugin.CONFIG_FROMBLOCK_LIST);
+    public void runCommand(CommandSender sender, Command baseCommand, String baseCommandLabel, String subCommandLabel, String[] subCommandArgs) {
+        Collection<Material> enabledBlocks = tbr.configuration.getEnabled();
         if (enabledBlocks.isEmpty()) {
             sender.sendMessage(ColorList.REG + "There are no records. Use " + ColorList.CMD + "/" + baseCommandLabel + ColorList.SUBCMD + " add" + ColorList.REG + " to add one.");
             return;
         }
         sender.sendMessage(ColorList.TOP_SEPERATOR + " -- " + ColorList.TOP + "Block Records" + ColorList.TOP_SEPERATOR + " --");
         sender.sendMessage(ColorList.TOP + " FromBlock" + ColorList.TOP_SEPERATOR + " -- " + ColorList.TOP + "ToBlock" + ColorList.TOP_SEPERATOR + " -- " + ColorList.TOP + "Time");
-        for (Integer i : enabledBlocks) {
-            int toBlock = tbr.getConfig().getInt(TimedBlockReplacePlugin.CONFIG_TO_BLOCK_PREFIX + i);
-            int time = tbr.getConfig().getInt(TimedBlockReplacePlugin.CONFIG_TIMES_PREFIX + i);
-            sender.sendMessage(ColorList.REG + " " + i + ColorList.TOP_SEPERATOR + " -- " + ColorList.REG + toBlock + ColorList.TOP_SEPERATOR + " -- " + ColorList.REG + "" + ColorList.TOP_SEPERATOR + " -- " + ColorList.REG + time + "s");
+        for (Material material : enabledBlocks) {
+            Configuration.ReplaceInfo info = tbr.configuration.replacing(material);
+
+            sender.sendMessage(ColorList.REG + " " + material
+                    + ColorList.TOP_SEPERATOR + " -- "
+                    + ColorList.REG + info.material
+                    + ColorList.TOP_SEPERATOR + " -- "
+                    + ColorList.REG + info.timeout + "s");
         }
     }
 }

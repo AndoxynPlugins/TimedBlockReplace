@@ -17,10 +17,9 @@
 package net.daboross.bukkitdev.timedblockreplace;
 
 import net.daboross.bukkitdev.commandexecutorbase.CommandExecutorBase;
-import net.daboross.bukkitdev.commandexecutorbase.SubCommand;
-import net.daboross.bukkitdev.timedblockreplace.subcommandhandlers.AddCommandHandler;
-import net.daboross.bukkitdev.timedblockreplace.subcommandhandlers.ListCommandHandler;
-import net.daboross.bukkitdev.timedblockreplace.subcommandhandlers.RemoveCommandHandler;
+import net.daboross.bukkitdev.timedblockreplace.commands.AddCommand;
+import net.daboross.bukkitdev.timedblockreplace.commands.ListCommand;
+import net.daboross.bukkitdev.timedblockreplace.commands.RemoveCommand;
 import org.bukkit.command.PluginCommand;
 
 /**
@@ -33,15 +32,9 @@ public class ConfigChangeCommandHandler {
 
     public ConfigChangeCommandHandler(TimedBlockReplacePlugin main) {
         commandExecutorBase = new CommandExecutorBase("timedblockreplace.config");
-        SubCommand addCommand = new SubCommand("add", true, "timedblockreplace.add", new String[]{"FromBlockID", "ToBlock", "TimeTillChange"},
-                "Sets the FromBlock to change to the ToBlock after TimeTillChange seconds", new AddCommandHandler(main));
-        SubCommand removeCommand = new SubCommand("remove", true, "timedblockreplace.remove",
-                new String[]{"FromBlockID"}, "Removes a record added with `add`", new RemoveCommandHandler(main));
-        SubCommand listCommand = new SubCommand("list", true, "timedblockreplace.list",
-                "Lists all currently active blocks set to change", new ListCommandHandler(main));
-        commandExecutorBase.addSubCommand(addCommand);
-        commandExecutorBase.addSubCommand(removeCommand);
-        commandExecutorBase.addSubCommand(listCommand);
+        commandExecutorBase.addSubCommand(new AddCommand(main));
+        commandExecutorBase.addSubCommand(new RemoveCommand(main));
+        commandExecutorBase.addSubCommand(new ListCommand(main));
     }
 
     protected void registerCommand(PluginCommand command) {
