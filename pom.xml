@@ -60,12 +60,6 @@
             <version>1.5.2</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>net.daboross.metrics.bukkit</groupId>
-            <artifactId>metrics-lite</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
     <build>
@@ -101,10 +95,6 @@
                         </goals>
                         <configuration>
                             <relocations>
-                                <relocation>
-                                    <pattern>org.mcstats</pattern>
-                                    <shadedPattern>net.daboross.bukkitdev.rankdisplay.libraries.mcstats</shadedPattern>
-                                </relocation>
                                 <relocation>
                                     <pattern>net.daboross.bukkitdev.commandexecutorbase</pattern>
                                     <shadedPattern>net.daboross.bukkitdev.timedblockreplace.libraries.commandexecutorbase</shadedPattern>

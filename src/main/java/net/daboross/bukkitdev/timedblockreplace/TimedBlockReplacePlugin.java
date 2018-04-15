@@ -23,7 +23,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.mcstats.MetricsLite;
 
 /**
  *
@@ -44,15 +43,6 @@ public class TimedBlockReplacePlugin extends JavaPlugin {
         PluginCommand tbr = getCommand("tbr");
         if (tbr != null) {
             new ConfigChangeCommandHandler(this).registerCommand(tbr);
-        }
-        MetricsLite metrics = null;
-        try {
-            metrics = new MetricsLite(this);
-        } catch (IOException ex) {
-            getLogger().log(Level.WARNING, "Unable to create Metrics", ex);
-        }
-        if (metrics != null) {
-            metrics.start();
         }
     }
 
